@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Sistema Monitorizacion</string>
+    <string name="name">Name</string>
+    <string name="email">email</string>
+    <string name="id">id</string>
+    <string name="sign_out">Sign Out</string>
 </resources>
