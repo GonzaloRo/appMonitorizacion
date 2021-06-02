@@ -3,6 +3,7 @@ package arduino.sistemamonitorizacion;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -23,7 +24,7 @@ public class SecondActivity extends AppCompatActivity {
 
     ImageView imageView;
     TextView name, email, id;
-    Button signOut;
+    Button signOut, ubicaciones;
 
     GoogleSignInClient mGoogleSignInClient;
 
@@ -43,6 +44,8 @@ public class SecondActivity extends AppCompatActivity {
         email = findViewById(R.id.email);
         id = findViewById(R.id.id);
         signOut = findViewById(R.id.button);
+        ubicaciones = findViewById(R.id.ubicaciones);
+
 
         signOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,8 +55,23 @@ public class SecondActivity extends AppCompatActivity {
                     case R.id.button:
                         signOut();
                         break;
-                    // ...
+                    // ..
                 }
+            }
+        });
+
+        ubicaciones.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    // ...
+                    case R.id.ubicaciones:
+                        Intent intent = new Intent(SecondActivity.this, MapsActivity.class);
+                        startActivity(intent);
+                        break;
+                    // ..
+                }
+
             }
         });
 

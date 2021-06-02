@@ -4,4 +4,7 @@
     <string name="email">email</string>
     <string name="id">id</string>
     <string name="sign_out">Sign Out</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="todo">TODO</string>
+    <string name="ver_ubicaciones">Ver Ubicaciones</string>
 </resources>
