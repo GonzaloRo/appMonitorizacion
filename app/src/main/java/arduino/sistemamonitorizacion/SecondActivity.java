@@ -24,7 +24,7 @@ public class SecondActivity extends AppCompatActivity {
 
     ImageView imageView;
     TextView name, email, id;
-    Button signOut, ubicaciones;
+    Button signOut, ubicaciones,temperatura,humedad,distancia;
 
     GoogleSignInClient mGoogleSignInClient;
 
@@ -45,7 +45,9 @@ public class SecondActivity extends AppCompatActivity {
         id = findViewById(R.id.id);
         signOut = findViewById(R.id.button);
         ubicaciones = findViewById(R.id.ubicaciones);
-
+        temperatura = findViewById(R.id.temperatura);
+        humedad = findViewById(R.id.humedad);
+        distancia  = findViewById(R.id.distancia);
 
         signOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +56,51 @@ public class SecondActivity extends AppCompatActivity {
                     // ...
                     case R.id.button:
                         signOut();
+                        break;
+                    // ..
+                }
+            }
+        });
+
+
+        temperatura.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    // ...
+                    case R.id.temperatura:
+                        Intent intent = new Intent(SecondActivity.this, TemperaturaActivity.class);
+                        intent.putExtra("temperatura", "temperatura");
+                        startActivity(intent);
+                        break;
+                    // ..
+                }
+            }
+        });
+
+        humedad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    // ...
+                    case R.id.humedad:
+                        Intent intent = new Intent(SecondActivity.this, HumendadActivity.class);
+                        intent.putExtra("humedad", "humedad");
+                        startActivity(intent);
+                        break;
+                    // ..
+                }
+            }
+        });
+        distancia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    // ...
+                    case R.id.distancia:
+                        Intent intent = new Intent(SecondActivity.this, DistanciaActivity.class);
+                        intent.putExtra("distancia", "distancia");
+                        startActivity(intent);
                         break;
                     // ..
                 }
@@ -99,4 +146,5 @@ public class SecondActivity extends AppCompatActivity {
                     }
                 });
     }
+
 }
