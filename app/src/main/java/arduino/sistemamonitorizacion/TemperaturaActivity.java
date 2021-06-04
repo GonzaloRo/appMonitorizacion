@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 import com.github.nkzawa.socketio.client.IO;
@@ -33,6 +36,11 @@ public class TemperaturaActivity extends AppCompatActivity {
     private int time = 2;
     private Socket mSocket;
     private String temperatura;
+
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String Email = "usernameKey";
+    SharedPreferences sharedpreferences;
+
     private final String urlLocal = "http://192.168.1.6:4000/limites_modulos?modulo_id=1&username="+"ag";
     {
         try {
@@ -58,10 +66,15 @@ public class TemperaturaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temperatura);
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
+        String email_get = sharedpreferences.getString(Email, "");
+        Toast.makeText(this, "El prefer es: " + email_get, Toast.LENGTH_LONG).show();
+
         textField1 = findViewById(R.id.textField1);
         temperatura = getIntent().getStringExtra("temperatura");
-        String nodejs = consumoWSG14.obtenerRespuestaPeticion(urlLocal, this);
-        limites = consumoWSG14.limites(nodejs, this);
+        //String nodejs = consumoWSG14.obtenerRespuestaPeticion(urlLocal, this);
+        //limites = consumoWSG14.limites(nodejs, this);
         if(savedInstanceState != null){
             hasConnection = savedInstanceState.getBoolean("hasConnection");
         }

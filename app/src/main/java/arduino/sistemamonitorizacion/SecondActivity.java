@@ -26,7 +26,7 @@ public class SecondActivity extends AppCompatActivity {
     TextView name, email, id;
     Button signOut, ubicaciones, gestionar_sitio;
 
-    Button signOut, ubicaciones,temperatura,humedad,distancia;
+    Button temperatura,humedad,distancia;
     private final String urlLocal = "http://192.168.1.6:4000/v";
 
 
