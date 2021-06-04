@@ -26,6 +26,9 @@ public class SecondActivity extends AppCompatActivity {
     TextView name, email, id;
     Button signOut, ubicaciones, gestionar_sitio;
 
+    Button signOut, ubicaciones,temperatura,humedad,distancia;
+    private final String urlLocal = "http://192.168.1.6:4000/v";
+
 
     GoogleSignInClient mGoogleSignInClient;
 
@@ -33,7 +36,7 @@ public class SecondActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
-
+        String nodejs = consumoWSG14.obtenerRespuestaPeticion(urlLocal, this);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -46,7 +49,12 @@ public class SecondActivity extends AppCompatActivity {
         id = findViewById(R.id.id);
         signOut = findViewById(R.id.button);
         ubicaciones = findViewById(R.id.ubicaciones);
+
         gestionar_sitio = findViewById(R.id.gestionar_sitio);
+
+        temperatura = findViewById(R.id.temperatura);
+        humedad = findViewById(R.id.humedad);
+        distancia  = findViewById(R.id.distancia);
 
         signOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +64,51 @@ public class SecondActivity extends AppCompatActivity {
                     case R.id.button:
                         signOut();
                         Intent intent = new Intent(SecondActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        break;
+                    // ..
+                }
+            }
+        });
+
+
+        temperatura.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    // ...
+                    case R.id.temperatura:
+                        Intent intent = new Intent(SecondActivity.this, TemperaturaActivity.class);
+                        intent.putExtra("temperatura", "temperatura");
+                        startActivity(intent);
+                        break;
+                    // ..
+                }
+            }
+        });
+
+        humedad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    // ...
+                    case R.id.humedad:
+                        Intent intent = new Intent(SecondActivity.this, HumendadActivity.class);
+                        intent.putExtra("humedad", "humedad");
+                        startActivity(intent);
+                        break;
+                    // ..
+                }
+            }
+        });
+        distancia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    // ...
+                    case R.id.distancia:
+                        Intent intent = new Intent(SecondActivity.this, DistanciaActivity.class);
+                        intent.putExtra("distancia", "distancia");
                         startActivity(intent);
                         break;
                     // ..
@@ -116,4 +169,5 @@ public class SecondActivity extends AppCompatActivity {
                     }
                 });
     }
+
 }
