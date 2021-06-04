@@ -25,6 +25,7 @@ public class SecondActivity extends AppCompatActivity {
     ImageView imageView;
     TextView name, email, id;
     Button signOut, ubicaciones,temperatura,humedad,distancia;
+    private final String urlLocal = "http://192.168.1.6:4000/v";
 
     GoogleSignInClient mGoogleSignInClient;
 
@@ -32,7 +33,7 @@ public class SecondActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
-
+        String nodejs = consumoWSG14.obtenerRespuestaPeticion(urlLocal, this);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();

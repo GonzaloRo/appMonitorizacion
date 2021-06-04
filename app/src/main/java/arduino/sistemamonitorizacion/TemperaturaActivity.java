@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 
 public class TemperaturaActivity extends AppCompatActivity {
@@ -28,11 +29,11 @@ public class TemperaturaActivity extends AppCompatActivity {
     public static final String TAG = "TemperaturaActivity";
     private Boolean hasConnection = false;
     private Thread thread2;
-
+    ArrayList<Float> limites;
     private int time = 2;
     private Socket mSocket;
     private String temperatura;
-
+    private final String urlLocal = "http://192.168.1.6:4000/limites_modulos?modulo_id=1&username="+"ag";
     {
         try {
             mSocket = IO.socket("http://192.168.1.6:4000/");
@@ -59,6 +60,8 @@ public class TemperaturaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_temperatura);
         textField1 = findViewById(R.id.textField1);
         temperatura = getIntent().getStringExtra("temperatura");
+        String nodejs = consumoWSG14.obtenerRespuestaPeticion(urlLocal, this);
+        limites = consumoWSG14.limites(nodejs, this);
         if(savedInstanceState != null){
             hasConnection = savedInstanceState.getBoolean("hasConnection");
         }
@@ -138,6 +141,7 @@ public class TemperaturaActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
                     textField1.setText(temperatura+"ºC");
 
                 }
