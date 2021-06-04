@@ -17,9 +17,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SistemaMonitorizacion">
+
+        <activity android:name=".AsignarClienteActivity"></activity>
+        <activity android:name=".UbicacionInsertarActivity" />
+        <activity android:name=".UbicacionMenuActivity" />
+        <activity android:name=".EmpresaInsertarActivity" />
+        <activity android:name=".EmpresaMenuActivity" />
+        <activity android:name=".UsuarioInsertarActivity" />
+        <activity android:name=".UsuarioMenuActivity" />
+        <activity android:name=".GestionesActivity" />
+
         <activity android:name=".DistanciaActivity"></activity>
         <activity android:name=".HumendadActivity" />
         <activity android:name=".TemperaturaActivity" />
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -43,7 +54,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <uses-library android:name="org.apache.http.legacy" android:required="false" />
+
     </application>
 
 </manifest>

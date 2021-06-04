@@ -24,8 +24,11 @@ public class SecondActivity extends AppCompatActivity {
 
     ImageView imageView;
     TextView name, email, id;
+    Button signOut, ubicaciones, gestionar_sitio;
+
     Button signOut, ubicaciones,temperatura,humedad,distancia;
     private final String urlLocal = "http://192.168.1.6:4000/v";
+
 
     GoogleSignInClient mGoogleSignInClient;
 
@@ -46,6 +49,9 @@ public class SecondActivity extends AppCompatActivity {
         id = findViewById(R.id.id);
         signOut = findViewById(R.id.button);
         ubicaciones = findViewById(R.id.ubicaciones);
+
+        gestionar_sitio = findViewById(R.id.gestionar_sitio);
+
         temperatura = findViewById(R.id.temperatura);
         humedad = findViewById(R.id.humedad);
         distancia  = findViewById(R.id.distancia);
@@ -57,6 +63,8 @@ public class SecondActivity extends AppCompatActivity {
                     // ...
                     case R.id.button:
                         signOut();
+                        Intent intent = new Intent(SecondActivity.this, MainActivity.class);
+                        startActivity(intent);
                         break;
                     // ..
                 }
@@ -123,6 +131,20 @@ public class SecondActivity extends AppCompatActivity {
             }
         });
 
+        gestionar_sitio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    // ...
+                    case R.id.gestionar_sitio:
+                        Intent intent = new Intent(SecondActivity.this, GestionesActivity.class);
+                        startActivity(intent);
+                        break;
+                    // ..
+                }
+
+            }
+        });
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
         if (acct != null) {
             String personName = acct.getDisplayName();
