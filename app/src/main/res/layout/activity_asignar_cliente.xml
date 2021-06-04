@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="30dip"
+    android:stretchColumns="1" >
+
+    <TableRow>
+        <TextView android:text="Bienvenido hemos visto "/>
+    </TableRow>
+    <TableRow>
+        <TextView android:text="que eres nuevo por aqui"/>
+    </TableRow>
+    <TableRow>
+        <TextView android:text="Por favor"/>
+    </TableRow>
+    <TableRow>
+        <TextView android:text="ingresa el codigo de tu empresa"/>
+    </TableRow>
+    <TableRow>
+        <TextView android:text="Codigo Empresa" />
+        <EditText
+            android:id="@+id/editCliente"
+            android:inputType="number" />
+    </TableRow>
+
+    <TableRow>
+        <TextView android:text="Opciones" />
+    </TableRow>
+
+    <TableRow>
+        <Button
+            android:onClick="insertarCodCliente"
+            android:text="@string/insertar" />
+        <Button android:onClick="limpiarTexto"
+            android:text="@string/limpiar" />
+    </TableRow>
+</TableLayout>

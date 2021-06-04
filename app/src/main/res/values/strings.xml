@@ -7,4 +7,12 @@
     <string name="title_activity_maps">Map</string>
     <string name="todo">TODO</string>
     <string name="ver_ubicaciones">Ver Ubicaciones</string>
+    <string name="gestiones">Gestiones</string>
+    <string name="gestiones_user">Gestionar usuarios</string>
+    <string name="image_rubro_context">Descripcion</string>
+    <string name="usuario">Usuario</string>
+    <string name="gestionar_empresas">Gestionar Empresas</string>
+    <string name="gestionar_ubicaciones">Gestionar Ubicaciones</string>
+    <string name="limpiar">limpiar</string>
+    <string name="insertar">insertar</string>
 </resources>
