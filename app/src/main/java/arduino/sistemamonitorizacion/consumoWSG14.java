@@ -55,12 +55,12 @@ public class consumoWSG14 {
         }
         return respuesta;
     }
-    public static ArrayList<Float> limites(String json, Context ctx) {
+    public static float[] limites(String json, Context ctx) {
 
-        ArrayList<Float>  limites = new ArrayList<>();
+        float[]  limites = new float[2];
         float max;
         float min=0;
-
+        Log.d("Error de parse",json);
         try {
             JSONArray combosJSON = new JSONArray(json);
 
@@ -68,10 +68,9 @@ public class consumoWSG14 {
                 JSONObject obj = combosJSON.getJSONObject(i);
                 max = (float) obj.getDouble("maximo");
                 min = (float) obj.getDouble("minimo");
-                limites.add(max);
-                limites.add(min);
+                limites[0]= max;
+                limites[1]= min;
             }
-
             return limites;
         } catch (Exception e) {
             Toast.makeText(ctx, "Error en parseOO de JSON", Toast.LENGTH_LONG)

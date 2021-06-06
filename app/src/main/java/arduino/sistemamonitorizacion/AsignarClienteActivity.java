@@ -21,7 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 public class AsignarClienteActivity extends AppCompatActivity {
 
     EditText editCliente;
-    private final String urlWeb = "http://192.168.1.8:4000/usuario_api_add";
+    private final String urlWeb = "http://192.168.1.6:4000/usuario_api_add";
     GoogleSignInClient mGoogleSignInClient;
     public static final String MyPREFERENCES = "MyPrefs" ;
     public static final String Email = "usernameKey";

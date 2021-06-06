@@ -3,13 +3,19 @@ package arduino.sistemamonitorizacion;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Bundle;
 
 import android.util.Log;
 
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 import com.github.nkzawa.socketio.client.IO;
@@ -21,17 +27,26 @@ import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 
+import static arduino.sistemamonitorizacion.SecondActivity.LimitesHumeMax;
+import static arduino.sistemamonitorizacion.SecondActivity.LimitesHumeMin;
+import static arduino.sistemamonitorizacion.SecondActivity.LimitesTempMax;
+import static arduino.sistemamonitorizacion.SecondActivity.LimitesTempMin;
+import static arduino.sistemamonitorizacion.SecondActivity.MyPREFERENCESLIMIT;
+
 
 public class HumendadActivity extends AppCompatActivity {
     private EditText textField1;
     public static final String TAG = "HumedadActivity";
     private Boolean hasConnection = false;
     private Thread thread2;
-
+    float[]  limites =  new float[2] ;
     private int time = 2;
     private Socket mSocket;
     private String humedad;
-
+    Button solucion;
+    SharedPreferences sharedpreferences;
+    int flag = 1;
+    private final String urlAlerta = "http://192.168.1.6:4000/f";
     {
         try {
             mSocket = IO.socket("http://192.168.1.6:4000/");
@@ -55,8 +70,15 @@ public class HumendadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_humendad);
+        sharedpreferences = getSharedPreferences(MyPREFERENCESLIMIT, Context.MODE_PRIVATE);
+        String max = sharedpreferences.getString(LimitesHumeMax, "");
+        String min = sharedpreferences.getString(LimitesHumeMin, "");
+        Log.v(TAG,"preferences"+max+min);
         textField1 = findViewById(R.id.textField1);
         humedad = getIntent().getStringExtra("temperatura");
+        limites[0] = (Float) Float.parseFloat(max);
+        limites[1] = (Float) Float.parseFloat(min);
+        Log.v(TAG,"limite"+limites[0]+limites[1]);
         if (savedInstanceState != null) {
             hasConnection = savedInstanceState.getBoolean("hasConnection");
         }
@@ -134,10 +156,35 @@ public class HumendadActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    textField1.setText(humedad+"%");
+                    if(!( (Float) Float.parseFloat(humedad) > limites[0] || (Float) Float.parseFloat(humedad) < limites[1] ) ){
+                        textField1.setText(humedad+"%");
+
+                    }else {
+                        if(flag == 1)
+                        {
+                            textField1.setText("!Medidas fuera de rango");
+                            String alerta = consumoWSG14.obtenerRespuestaPeticion(urlAlerta, HumendadActivity.this);
+                            Toast.makeText(HumendadActivity.this, "!Medidas fuera de rango", Toast.LENGTH_LONG).show();
+                            flag=0;
+                        }
+
+
+                    }
 
                 }
             });
         }
     };
+    public void solucion(View view) {
+        mSocket.disconnect();
+        time = -1;
+        Intent intent = new Intent(HumendadActivity.this, SecondActivity.class);
+        startActivity(intent);
+    }
+    @Override
+    public void onBackPressed() {
+        mSocket.disconnect();
+        Intent intent = new Intent(HumendadActivity.this, SecondActivity.class);
+        startActivity(intent);
+    }
 }

@@ -16,7 +16,7 @@ public class UsuarioInsertarActivity extends AppCompatActivity {
     EditText editNombre;
     EditText editCliente;
 
-    private final String urlWeb = "http://192.168.1.8:4000/usuario_api_add";
+    private final String urlWeb = "http://192.168.1.6:4000/usuario_api_add";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
