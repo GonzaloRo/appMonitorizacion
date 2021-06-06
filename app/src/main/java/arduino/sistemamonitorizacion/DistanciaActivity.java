@@ -4,13 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Bundle;
 
 import android.util.Log;
 
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 import com.github.nkzawa.socketio.client.IO;
@@ -22,16 +28,27 @@ import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 
+import static arduino.sistemamonitorizacion.SecondActivity.LimitesDisMax;
+import static arduino.sistemamonitorizacion.SecondActivity.LimitesDisMin;
+import static arduino.sistemamonitorizacion.SecondActivity.LimitesTempMax;
+import static arduino.sistemamonitorizacion.SecondActivity.LimitesTempMin;
+import static arduino.sistemamonitorizacion.SecondActivity.MyPREFERENCESLIMIT;
+
 
 public class DistanciaActivity extends AppCompatActivity {
     private EditText textField1;
     public static final String TAG = "DistanciaActivity";
     private Boolean hasConnection = false;
     private Thread thread2;
-
+    float[]  limites =  new float[2] ;
     private int time = 2;
     private Socket mSocket;
     private String distancia;
+    Button solucion;
+    SharedPreferences sharedpreferences;
+    int flag = 1;
+
+    private final String urlAlerta = "http://192.168.1.6:4000/a";
     {
         try {
             mSocket = IO.socket("http://192.168.1.6:4000/");
@@ -51,7 +68,13 @@ public class DistanciaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_distancia);
+        sharedpreferences = getSharedPreferences(MyPREFERENCESLIMIT, Context.MODE_PRIVATE);
+        String max = sharedpreferences.getString(LimitesDisMax, "");
+        String min = sharedpreferences.getString(LimitesDisMin, "");
         textField1 = findViewById(R.id.textField1);
+        solucion = findViewById(R.id.solucion);
+        limites[0] = (Float) Float.parseFloat(max);
+        limites[1] = (Float) Float.parseFloat(min);
         distancia = getIntent().getStringExtra("distancia");
         if (savedInstanceState != null) {
             hasConnection = savedInstanceState.getBoolean("hasConnection");
@@ -129,10 +152,36 @@ public class DistanciaActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    textField1.setText(distancia+" cm");
+                    if(!( (Float) Float.parseFloat(distancia) > limites[0] || (Float) Float.parseFloat(distancia) < limites[1] ) ){
+                        textField1.setText(distancia+" cm");
+
+                    }else {
+                        if(flag == 1)
+                        {
+                            textField1.setText("!Medidas fuera de rango");
+                            String alerta = consumoWSG14.obtenerRespuestaPeticion(urlAlerta, DistanciaActivity.this);
+                            Toast.makeText(DistanciaActivity.this, "!Medidas fuera de rango", Toast.LENGTH_LONG).show();
+                            flag=0;
+                        }
+
+
+                    }
+
 
                 }
             });
         }
     };
+    public void solucion(View view) {
+        mSocket.disconnect();
+        time = -1;
+        Intent intent = new Intent(DistanciaActivity.this, SecondActivity.class);
+        startActivity(intent);
+    }
+    @Override
+    public void onBackPressed() {
+        mSocket.disconnect();
+        Intent intent = new Intent(DistanciaActivity.this, SecondActivity.class);
+        startActivity(intent);
+    }
 }

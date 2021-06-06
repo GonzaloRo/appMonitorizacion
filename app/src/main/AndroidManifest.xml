@@ -8,17 +8,17 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:usesCleartextTraffic="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SistemaMonitorizacion">
-
-        <activity android:name=".AsignarClienteActivity"></activity>
+        android:theme="@style/Theme.SistemaMonitorizacion"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".BiometricActivity"></activity>
+        <activity android:name=".AsignarClienteActivity" />
         <activity android:name=".UbicacionInsertarActivity" />
         <activity android:name=".UbicacionMenuActivity" />
         <activity android:name=".EmpresaInsertarActivity" />
@@ -26,11 +26,9 @@
         <activity android:name=".UsuarioInsertarActivity" />
         <activity android:name=".UsuarioMenuActivity" />
         <activity android:name=".GestionesActivity" />
-
-        <activity android:name=".DistanciaActivity"></activity>
+        <activity android:name=".DistanciaActivity" />
         <activity android:name=".HumendadActivity" />
         <activity android:name=".TemperaturaActivity" />
-
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -55,8 +53,9 @@
             </intent-filter>
         </activity>
 
-        <uses-library android:name="org.apache.http.legacy" android:required="false" />
-
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
     </application>
 
 </manifest>

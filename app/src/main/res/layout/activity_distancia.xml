@@ -21,4 +21,11 @@
         android:gravity="center"
         android:text="Esperando distancia" />
 
+    <Button
+        android:id="@+id/solucion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Solucionado"
+        android:onClick="solucion"/>
+
 </LinearLayout>
