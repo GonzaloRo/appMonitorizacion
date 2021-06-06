@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
@@ -12,6 +13,8 @@ import android.os.Bundle;
 
 import android.util.Log;
 
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -26,25 +29,29 @@ import org.json.JSONObject;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
+import static arduino.sistemamonitorizacion.SecondActivity.LimitesTempMax;
+import static arduino.sistemamonitorizacion.SecondActivity.LimitesTempMin;
+import static arduino.sistemamonitorizacion.SecondActivity.MyPREFERENCESLIMIT;
+
 
 public class TemperaturaActivity extends AppCompatActivity {
     private EditText textField1;
     public static final String TAG = "TemperaturaActivity";
     private Boolean hasConnection = false;
     private Thread thread2;
-    ArrayList<Float> limites;
+    float[]  limites =  new float[2] ;
     private int time = 2;
     private Socket mSocket;
     private String temperatura;
-
-    public static final String MyPREFERENCES = "MyPrefs" ;
-    public static final String Email = "usernameKey";
+    Button solucion;
     SharedPreferences sharedpreferences;
+    int flag = 1;
 
-    private final String urlLocal = "http://192.168.1.3:4000/limites_modulos?modulo_id=1&username="+"ag";
+    private final String urlAlerta = "http://192.168.1.6:4000/r";
+
     {
         try {
-            mSocket = IO.socket("http://192.168.1.3:4000/");
+            mSocket = IO.socket("http://192.168.1.6:4000/");
         } catch (URISyntaxException e) {
         }
     }
@@ -57,7 +64,7 @@ public class TemperaturaActivity extends AppCompatActivity {
 
             setTitle("Monitoriando Temperatura");
             Log.i(TAG, "handleMessage: typing stopped time is " + time);
-
+            Log.w(TAG, "Limites " +limites[0]);
 
         }
     };
@@ -66,15 +73,16 @@ public class TemperaturaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temperatura);
-        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-
-        String email_get = sharedpreferences.getString(Email, "");
-        Toast.makeText(this, "El prefer es: " + email_get, Toast.LENGTH_LONG).show();
-
+        sharedpreferences = getSharedPreferences(MyPREFERENCESLIMIT, Context.MODE_PRIVATE);
+        String max = sharedpreferences.getString(LimitesTempMax, "");
+        String min = sharedpreferences.getString(LimitesTempMin, "");
+        Log.v(TAG,"preferences"+max+min);
         textField1 = findViewById(R.id.textField1);
+        solucion = findViewById(R.id.solucion);
         temperatura = getIntent().getStringExtra("temperatura");
-        //String nodejs = consumoWSG14.obtenerRespuestaPeticion(urlLocal, this);
-        //limites = consumoWSG14.limites(nodejs, this);
+        limites[0] = (Float) Float.parseFloat(max);
+        limites[1] = (Float) Float.parseFloat(min);
+        Log.v(TAG,"limite"+limites[0]+limites[1]);
         if(savedInstanceState != null){
             hasConnection = savedInstanceState.getBoolean("hasConnection");
         }
@@ -90,26 +98,30 @@ public class TemperaturaActivity extends AppCompatActivity {
                             new Runnable() {
                                 @Override
                                 public void run() {
-                                    while (time > 0) {
 
+                                    while (time > 0) {
                                         Log.i(TAG, "while" + time);
+
                                         synchronized (this) {
                                             Log.i(TAG, "synchronized");
 
                                             JSONObject Temp = new JSONObject();
                                             try {
+
+
                                               try {
+
                                                   Temp.put("Temperatura", temperatura );
                                                 mSocket.emit("Temperatura", Temp);
                                                 mSocket.on("Temperatura", onTemp);
-                                                wait(10000);
-                                                Log.i(TAG, "run: typing " + time);
+                                                  wait(10000);
+
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }
                                             } catch (InterruptedException e) {
                                                 e.printStackTrace();
-                                                Log.w(TAG, "catch: typing " + e);
+                                                Log.w(TAG, "catch:" + e);
                                             }
                                             //  time--;
                                         }
@@ -134,6 +146,7 @@ public class TemperaturaActivity extends AppCompatActivity {
         outState.putBoolean("hasConnection", hasConnection);
     }
 
+
     Emitter.Listener onTemp = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
@@ -145,8 +158,6 @@ public class TemperaturaActivity extends AppCompatActivity {
                         return;
                     }
                     //Here i'm getting weird error..................///////run :1 and run: 0
-                    Log.i(TAG, "run: ");
-                    Log.i(TAG, "run: " + args.length);
                     String temperatura = args[0].toString();
                     try {
                         JSONObject object = new JSONObject(temperatura);
@@ -154,12 +165,38 @@ public class TemperaturaActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    if(!( (Float) Float.parseFloat(temperatura) > limites[0] || (Float) Float.parseFloat(temperatura) < limites[1] ) ){
+                        textField1.setText(temperatura+"ºC");
 
-                    textField1.setText(temperatura+"ºC");
+                    }else {
+                            if(flag == 1)
+                            {
+                                textField1.setText("!Medidas fuera de rango");
+                                String alerta = consumoWSG14.obtenerRespuestaPeticion(urlAlerta, TemperaturaActivity.this);
+                                Toast.makeText(TemperaturaActivity.this, "!Medidas fuera de rango", Toast.LENGTH_LONG).show();
+                                flag=0;
+                            }
+
+
+                    }
+
 
                 }
             });
         }
     };
+
+    public void solucion(View view) {
+        mSocket.disconnect();
+        time = -1;
+        Intent intent = new Intent(TemperaturaActivity.this, SecondActivity.class);
+        startActivity(intent);
+    }
+    @Override
+    public void onBackPressed() {
+        mSocket.disconnect();
+        Intent intent = new Intent(TemperaturaActivity.this, SecondActivity.class);
+        startActivity(intent);
+    }
 }
 
