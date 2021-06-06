@@ -11,7 +11,9 @@ import android.widget.Toast;
 public class EmpresaInsertarActivity extends AppCompatActivity {
 
     EditText editNombre, editDireccion, editTelefono, editRubro, editFecha, editCorreo;
+
     private final String urlWeb = "http://192.168.1.6:4000/cliente_api_add";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

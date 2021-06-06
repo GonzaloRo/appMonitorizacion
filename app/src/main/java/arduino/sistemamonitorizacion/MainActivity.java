@@ -91,7 +91,9 @@ public class MainActivity extends AppCompatActivity {
                 Log.v("DATA USER", "email: " + personEmail);
 
                 String urlW = "";
+
                 urlW = "http://192.168.1.6:4000/user_api_read?username="+personEmail;
+
                 String users = ConsumoNodeJS.obtenerRespuestaPeticion(urlW, this);
                     listaUsers.clear();
                 try {
@@ -114,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                     editor.commit();
                     String email_get = sharedpreferences.getString(Email, "");
 
-                    Toast.makeText(this, "El prefer es: " + email_get, Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "El prefer es: " + email_get, Toast.LENGTH_LONG).show();
                 }else{
                     Intent intent = new Intent(MainActivity.this, AsignarClienteActivity.class);
                     startActivity(intent);

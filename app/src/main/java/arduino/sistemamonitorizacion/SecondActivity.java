@@ -32,6 +32,7 @@ public class SecondActivity extends AppCompatActivity {
     float[]  limitesHume =  new float[2] ;
     float[]  limitesDis =  new float[2] ;
     Button temperatura,humedad,distancia;
+
     public static final String MyPREFERENCESLIMIT = "Limites" ;
     public static final String LimitesTempMax = "maxKeyTemp";
     public static final String LimitesTempMin = "minKeyTemp";
@@ -44,6 +45,7 @@ public class SecondActivity extends AppCompatActivity {
     private final String urlLimitesTemp = "http://192.168.1.6:4000/limites_modulos?modulo_id=1&username=";
     private final String urlLimitesHume= "http://192.168.1.6:4000/limites_modulos?modulo_id=2&username=";
     private final String urlLimitesDis = "http://192.168.1.6:4000/limites_modulos?modulo_id=3&username=";
+
 
     GoogleSignInClient mGoogleSignInClient;
 

@@ -49,7 +49,7 @@ public class HumendadActivity extends AppCompatActivity {
     private final String urlAlerta = "http://192.168.1.6:4000/f";
     {
         try {
-            mSocket = IO.socket("http://192.168.1.6:4000/");
+            mSocket = IO.socket("http://192.168.1.3:4000/");
         } catch (URISyntaxException e) {
         }
     }

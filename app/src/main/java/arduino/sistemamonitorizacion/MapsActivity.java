@@ -2,7 +2,11 @@ package arduino.sistemamonitorizacion;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.ListView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -11,15 +15,25 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    static List<Ubicacion> listaUbicaciones;
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String Email = "usernameKey";
+    SharedPreferences sharedpreferences;
+
+    String urlWeb = "http://192.168.1.3:4000/ubicacion_api_read";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        listaUbicaciones = new ArrayList<Ubicacion>();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -37,10 +51,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        //voy a solicitar ubicaciones
+        String email = "";
+        String url = "";
 
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        email = sharedpreferences.getString(Email, "");
+        // it was the first button
+        url = urlWeb + "?cliente_id=" + email;
+        String ubicacion = ConsumoNodeJS.obtenerRespuestaPeticion(url, this);
+        try {
+
+            listaUbicaciones.addAll(ConsumoNodeJS.obtenerUbicacionesExterno(ubicacion, this));
+
+            for (int i = 0; i < listaUbicaciones.size(); i++) {
+                Log.v("LAT", listaUbicaciones.get(i).getLatUbicacion());
+                Log.v("LON", listaUbicaciones.get(i).getLogUbicacion());
+                LatLng sydney = new LatLng(Double.parseDouble(listaUbicaciones.get(i).getLatUbicacion()), Double.parseDouble(listaUbicaciones.get(i).getLogUbicacion()));
+                mMap.addMarker(new MarkerOptions().position(sydney).title("Ubicacion " + i));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
     }
 }
