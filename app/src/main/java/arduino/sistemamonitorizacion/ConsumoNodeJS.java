@@ -80,4 +80,27 @@ public class ConsumoNodeJS {
             return null;
         }
     }
+
+    public static List<Ubicacion> obtenerUbicacionesExterno(String json, Context ctx) {
+        Log.v("JSON_UBICACIONES", json);
+        List<Ubicacion> listaUbicaciones = new ArrayList<Ubicacion>();
+
+        try {
+            JSONArray ubicacionesJSON = new JSONArray(json);
+            for (int i = 0; i < ubicacionesJSON.length(); i++) {
+                JSONObject obj = ubicacionesJSON.getJSONObject(i);
+                Ubicacion ubicacion = new Ubicacion();
+                ubicacion.setCodClienteUbicacion(obj.getInt("id"));
+                ubicacion.setLatUbicacion(obj.getString("lat"));
+                ubicacion.setLogUbicacion(obj.getString("lon"));
+                ubicacion.setNombreUbicacion(obj.getString("direccion"));
+                listaUbicaciones.add(ubicacion);
+            }
+            return listaUbicaciones;
+        } catch (Exception e) {
+            Toast.makeText(ctx, "Error en parseOO de JSON", Toast.LENGTH_LONG)
+                    .show();
+            return null;
+        }
+    }
 }

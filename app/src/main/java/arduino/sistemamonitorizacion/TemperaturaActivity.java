@@ -41,10 +41,10 @@ public class TemperaturaActivity extends AppCompatActivity {
     public static final String Email = "usernameKey";
     SharedPreferences sharedpreferences;
 
-    private final String urlLocal = "http://192.168.1.6:4000/limites_modulos?modulo_id=1&username="+"ag";
+    private final String urlLocal = "http://192.168.1.3:4000/limites_modulos?modulo_id=1&username="+"ag";
     {
         try {
-            mSocket = IO.socket("http://192.168.1.6:4000/");
+            mSocket = IO.socket("http://192.168.1.3:4000/");
         } catch (URISyntaxException e) {
         }
     }

@@ -11,7 +11,7 @@ import android.widget.Toast;
 public class UbicacionInsertarActivity extends AppCompatActivity {
 
     EditText editNombre, editLat, editLon, editCliente;
-    private final String urlWeb = "http://192.168.1.8:4000/ubicacion_api_add";
+    private final String urlWeb = "http://192.168.1.3:4000/ubicacion_api_add";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -27,7 +27,7 @@ public class SecondActivity extends AppCompatActivity {
     Button signOut, ubicaciones, gestionar_sitio;
 
     Button temperatura,humedad,distancia;
-    private final String urlLocal = "http://192.168.1.6:4000/v";
+    private final String urlLocal = "http://192.168.1.3:4000/v";
 
 
     GoogleSignInClient mGoogleSignInClient;
